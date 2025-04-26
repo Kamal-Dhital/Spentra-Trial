@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/income/', include('income.urls')),
     path('api/expenses/', include('expenses.urls')),
     path('api/budgeting/', include('budgeting.urls')),
+    path('api/transaction/', include('transaction.urls')),
 ]
