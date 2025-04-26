@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'authentication',
     'rest_framework',
     'drf_yasg',
+    'income',
 ]
 
 MIDDLEWARE = [
