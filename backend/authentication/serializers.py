@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.core.exceptions import ObjectDoesNotExist
 
 class RegisterSerializer(serializers.ModelSerializer):
     """
@@ -67,3 +68,32 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid credentials.")
         data['user'] = user
         return data
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError("User with this email does not exist.")
+        return value
+
+
+class VerifyOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
+    new_password = serializers.CharField(write_only=True)
+
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError("User with this email does not exist.")
+        return value
